@@ -42,9 +42,9 @@ Student Task Manager adalah aplikasi sederhana untuk membantu mahasiswa mencatat
 ---
 
 ## 📁 Struktur Project
-docs/ → dokumentasi
-src/ → source code
-tests/ → unit testing
+- docs/ → dokumentasi
+- src/ → source code
+- tests/ → unit testing
 
 ## ▶ Cara Menjalankan
 1. Clone repository
@@ -56,10 +56,12 @@ tests/ → unit testing
 ## 👥 Tim Pengembang
 | Nama | Role |
 |-----|------|
-| Nama Kamu | Lead |
-| Anggota 1 | Developer |
+| Anggota 1 | Lead |
 | Anggota 2 | Developer |
 | Anggota 3 | Developer |
+| Anggota 4 | Developer |
+| Anggota 5 | Developer |
+
 
 ---
 
