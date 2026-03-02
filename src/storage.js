@@ -48,7 +48,11 @@ export const Storage = {
 
     updateTask: (id, updates) => {
         const data = Storage.getData();
+
+        if (!data.tasks) return;
+
         const index = data.tasks.findIndex(t => t.id === id);
+
         if (index > -1) {
             data.tasks[index] = { ...data.tasks[index], ...updates };
             Storage.saveData(data);
@@ -57,6 +61,9 @@ export const Storage = {
 
     deleteTask: (id) => {
         const data = Storage.getData();
+
+        if (!data.tasks) return;
+
         data.tasks = data.tasks.filter(t => t.id !== id);
         Storage.saveData(data);
     },
