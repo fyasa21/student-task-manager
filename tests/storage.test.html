@@ -11,28 +11,40 @@
 
       console.log("TEST START");
 
-      // Ambil data awal
+      // === TEST ADD ===
       const before = Storage.getTasks().length;
-
-      // Tambah task baru
       const newTask = Storage.addTask({
-        title: "Test Task",
-        description: "Testing addTask",
+        title: "Unit Test",
+        description: "Testing",
         status: "todo",
         projectId: "p1",
       });
-
-      // Ambil data setelah tambah
       const after = Storage.getTasks().length;
 
-      if (after === before + 1) {
-        console.log("✅ TEST PASS: addTask berhasil");
-      } else {
-        console.log("❌ TEST FAIL: addTask gagal");
-      }
+      console.log(after === before + 1 ? "✅ addTask PASS" : "❌ addTask FAIL");
 
-      // Hapus task biar bersih
+      // === TEST UPDATE ===
+      Storage.updateTask(newTask.id, { status: "done" });
+      const updated = Storage.getTasks().find((t) => t.id === newTask.id);
+
+      console.log(
+        updated.status === "done" ? "✅ updateTask PASS" : "❌ updateTask FAIL",
+      );
+
+      // === TEST DELETE ===
       Storage.deleteTask(newTask.id);
+      const exists = Storage.getTasks().find((t) => t.id === newTask.id);
+
+      console.log(!exists ? "✅ deleteTask PASS" : "❌ deleteTask FAIL");
+
+      // === TEST STATS ===
+      const stats = Storage.getStats();
+
+      console.log(
+        typeof stats.total === "number"
+          ? "✅ getStats PASS"
+          : "❌ getStats FAIL",
+      );
 
       console.log("TEST END");
     </script>
