@@ -11,40 +11,95 @@
 
       console.log("TEST START");
 
+      // RESET STORAGE
+      localStorage.removeItem("actask_data");
+
+      // === TEST DEFAULT DATA ===
+      const initData = Storage.getData();
+      console.log(
+        initData.tasks.length > 0
+          ? "✅ default data PASS"
+          : "❌ default data FAIL"
+      );
+
+      // === TEST GET PROJECTS ===
+      const projects = Storage.getProjects();
+      console.log(
+        Array.isArray(projects)
+          ? "✅ getProjects PASS"
+          : "❌ getProjects FAIL"
+      );
+
       // === TEST ADD ===
       const before = Storage.getTasks().length;
+
       const newTask = Storage.addTask({
         title: "Unit Test",
         description: "Testing",
         status: "todo",
         projectId: "p1",
       });
+
       const after = Storage.getTasks().length;
 
-      console.log(after === before + 1 ? "✅ addTask PASS" : "❌ addTask FAIL");
+      console.log(after === before + 1
+        ? "✅ addTask PASS"
+        : "❌ addTask FAIL"
+      );
 
       // === TEST UPDATE ===
       Storage.updateTask(newTask.id, { status: "done" });
-      const updated = Storage.getTasks().find((t) => t.id === newTask.id);
+
+      const updated = Storage.getTasks().find(
+        (t) => t.id === newTask.id
+      );
 
       console.log(
-        updated.status === "done" ? "✅ updateTask PASS" : "❌ updateTask FAIL",
+        updated.status === "done"
+          ? "✅ updateTask PASS"
+          : "❌ updateTask FAIL"
       );
 
       // === TEST DELETE ===
       Storage.deleteTask(newTask.id);
-      const exists = Storage.getTasks().find((t) => t.id === newTask.id);
 
-      console.log(!exists ? "✅ deleteTask PASS" : "❌ deleteTask FAIL");
+      const exists = Storage.getTasks().find(
+        (t) => t.id === newTask.id
+      );
+
+      console.log(!exists
+        ? "✅ deleteTask PASS"
+        : "❌ deleteTask FAIL"
+      );
 
       // === TEST STATS ===
       const stats = Storage.getStats();
 
       console.log(
-        typeof stats.total === "number"
+        typeof stats.total === "number" &&
+        typeof stats.done === "number" &&
+        typeof stats.pending === "number"
           ? "✅ getStats PASS"
-          : "❌ getStats FAIL",
+          : "❌ getStats FAIL"
       );
+
+      // === TEST SAVE DATA ===
+      Storage.saveData({ test: true });
+
+      const raw = JSON.parse(localStorage.getItem("actask_data"));
+
+      console.log(
+        raw.test === true
+          ? "✅ saveData PASS"
+          : "❌ saveData FAIL"
+      );
+
+      // === EDGE CASE TEST ===
+      Storage.updateTask("id-tidak-ada", { status: "done" });
+      console.log("✅ update invalid id PASS (no crash)");
+
+      Storage.deleteTask("id-tidak-ada");
+      console.log("✅ delete invalid id PASS (no crash)");
 
       console.log("TEST END");
     </script>
