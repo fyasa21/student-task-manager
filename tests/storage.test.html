@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Storage Test</title>
+  </head>
+  <body>
+    <h1>Testing storage.js</h1>
+
+    <script type="module">
+      import { Storage } from "../src/storage.js";
+
+      console.log("TEST START");
+
+      // Ambil data awal
+      const before = Storage.getTasks().length;
+
+      // Tambah task baru
+      const newTask = Storage.addTask({
+        title: "Test Task",
+        description: "Testing addTask",
+        status: "todo",
+        projectId: "p1",
+      });
+
+      // Ambil data setelah tambah
+      const after = Storage.getTasks().length;
+
+      if (after === before + 1) {
+        console.log("✅ TEST PASS: addTask berhasil");
+      } else {
+        console.log("❌ TEST FAIL: addTask gagal");
+      }
+
+      // Hapus task biar bersih
+      Storage.deleteTask(newTask.id);
+
+      console.log("TEST END");
+    </script>
+  </body>
+</html>
