@@ -56,14 +56,14 @@ Student Task Manager adalah aplikasi sederhana untuk membantu mahasiswa mencatat
 ## 👥 Tim Pengembang
 | Nama | Role |
 |-----|------|
-| Anggota 1 | Lead |
-| Anggota 2 | Developer |
-| Anggota 3 | Developer |
-| Anggota 4 | Developer |
-| Anggota 5 | Developer |
+| Fathir Yasa Ramadhan | Lead |
+| Muhammad Luthfi Novansyah | Developer |
+| Rifza Hamdalah Putra | Developer |
+| Imam Budiansyah | Developer |
+| Ghyfa Galang Ahmad Wahyudin | Developer |
 
 
 ---
 
 ## 📜 Lisensi
-Project ini dibuat untuk keperluan akademik.
+Aplikasi ini dibuat untuk keperluan akademik
