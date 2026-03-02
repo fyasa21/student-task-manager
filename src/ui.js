@@ -35,47 +35,71 @@ export const UI = {
 
     renderKanban: (container) => {
         const tasks = Storage.getTasks();
+        const today = new Date().toISOString().split('T')[0];
+
+        // LOGIKA OTOMATIS: Deteksi task yang lewat deadline dan belum 'done'
+        const isOverdue = (t) => (t.status !== 'done') && ((t.deadline && t.deadline < today) || t.status === 'overdue');
+
         const cols = [
-            { id: 'todo', title: 'To Do' },
-            { id: 'in_progress', title: 'In Progress' },
-            { id: 'done', title: 'Done' }
+            { id: 'todo', title: 'To Do', filter: t => t.status === 'todo' && !isOverdue(t) },
+            { id: 'in_progress', title: 'In Progress', filter: t => t.status === 'in_progress' && !isOverdue(t) },
+            { id: 'overdue', title: 'Past Deadline', filter: t => isOverdue(t) },
+            { id: 'done', title: 'Done', filter: t => t.status === 'done' }
         ];
 
         container.innerHTML = `
             <div class="kanban-board" style="display: flex; gap: var(--space-4); height: 100%; overflow-x: auto; padding-bottom: var(--space-4);">
-                ${cols.map(col => `
+                ${cols.map(col => {
+                    const colTasks = tasks.filter(col.filter);
+                    return `
                     <div class="kanban-col" data-status="${col.id}" style="flex: 0 0 320px; background: var(--bg-surface); border-radius: var(--radius-md); padding: var(--space-3); display: flex; flex-direction: column;">
-                        <h4 style="margin-bottom: var(--space-4); padding: 0 var(--space-2); display: flex; justify-content: space-between;">
-                            ${col.title} <span style="color: var(--text-muted);">${tasks.filter(t => t.status === col.id).length}</span>
+                        <h4 style="margin-bottom: var(--space-4); padding: 0 var(--space-2); display: flex; justify-content: space-between; color: ${col.id === 'overdue' ? 'var(--color-danger)' : 'inherit'};">
+                            ${col.title} <span style="color: var(--text-muted);">${colTasks.length}</span>
                         </h4>
                         <div class="kanban-list" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: var(--space-3);">
-                            ${tasks.filter(t => t.status === col.id).map(t => UI.createTaskCard(t)).join('')}
+                            ${colTasks.map(t => UI.createTaskCard(t)).join('')}
                         </div>
                     </div>
-                `).join('')}
+                    `;
+                }).join('')}
             </div>
         `;
     },
 
-    createTaskListItem: (task) => `
+    createTaskListItem: (task) => {
+        const today = new Date().toISOString().split('T')[0];
+        const isOverdue = (task.status !== 'done') && ((task.deadline && task.deadline < today) || task.status === 'overdue');
+        const displayStatus = isOverdue ? 'Overdue' : task.status.replace('_', ' ');
+        const badgeColor = isOverdue ? 'background: var(--color-danger); color: white;' : 'background: var(--bg-surface-active); color: var(--text-primary);';
+
+        return `
         <div class="task-item" style="background: var(--bg-surface); padding: var(--space-3); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); margin-bottom: var(--space-2); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: transform var(--transition-fast);" onclick="window.editTask('${task.id}')">
             <div>
                 <div style="font-weight: 500;">${task.title}</div>
                 <div style="font-size: var(--font-size-xs); color: var(--text-muted);">${task.description || 'No description'}</div>
+                ${task.deadline ? `<div style="font-size: var(--font-size-xs); color: ${isOverdue ? 'var(--color-danger)' : 'var(--text-muted)'}; margin-top: 4px; font-weight: 600;">Deadline: ${task.deadline}</div>` : ''}
             </div>
-            <span class="badge ${task.status}" style="font-size: var(--font-size-xs); padding: 2px 8px; border-radius: var(--radius-full); background: var(--bg-surface-active);">${task.status.replace('_', ' ')}</span>
+            <span class="badge" style="font-size: var(--font-size-xs); padding: 2px 8px; border-radius: var(--radius-full); ${badgeColor} text-transform: capitalize;">${displayStatus}</span>
         </div>
-    `,
+        `;
+    },
 
-    createTaskCard: (task) => `
-        <div class="task-card" draggable="true" ondragstart="window.dragStart(event, '${task.id}')" onclick="window.editTask('${task.id}')" style="background: var(--bg-base); padding: var(--space-3); border-radius: var(--radius-md); border: 1px solid var(--border-strong); cursor: grab;">
+    createTaskCard: (task) => {
+        const today = new Date().toISOString().split('T')[0];
+        const isOverdue = (task.status !== 'done') && ((task.deadline && task.deadline < today) || task.status === 'overdue');
+        const borderColor = isOverdue ? 'var(--color-danger)' : 'var(--border-strong)';
+
+        return `
+        <div class="task-card" draggable="true" ondragstart="window.dragStart(event, '${task.id}')" onclick="window.editTask('${task.id}')" style="background: var(--bg-base); padding: var(--space-3); border-radius: var(--radius-md); border: 1px solid ${borderColor}; cursor: grab;">
             <div style="font-weight: 500; margin-bottom: var(--space-1);">${task.title}</div>
-            <div style="font-size: var(--font-size-xs); color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${task.description || ''}</div>
+            <div style="font-size: var(--font-size-xs); color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: var(--space-2);">${task.description || ''}</div>
+            ${task.deadline ? `<div style="font-size: var(--font-size-xs); color: ${isOverdue ? 'var(--color-danger)' : 'var(--text-muted)'}; font-weight: 600; margin-top: var(--space-2);">Deadline: ${task.deadline}</div>` : ''}
         </div>
-    `,
+        `;
+    },
 
     openTaskModal: (taskId = null) => {
-        let task = taskId ? Storage.getTasks().find(t => t.id === taskId) : { title: '', description: '', status: 'todo' };
+        let task = taskId ? Storage.getTasks().find(t => t.id === taskId) : { title: '', description: '', status: 'todo', deadline: '' };
 
         const overlay = document.getElementById('modalOverlay');
         overlay.innerHTML = `
@@ -88,6 +112,10 @@ export const UI = {
                 
                 <textarea id="taskDesc" placeholder="Description..." style="width: 100%; padding: var(--space-3); margin-bottom: var(--space-4); background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: var(--radius-md); min-height: 100px; resize: vertical; font-family: var(--font-family-body); outline: none;">${task.description}</textarea>
                 
+                <label for="taskDeadline" style="display:block; margin-bottom: 4px; font-size: var(--font-size-sm); color: var(--text-secondary);">Deadline</label>
+                <input type="date" id="taskDeadline" value="${task.deadline || ''}" style="width: 100%; padding: var(--space-3); margin-bottom: var(--space-4); background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: var(--radius-md); outline: none;" title="Task Deadline">
+                
+                <label for="taskStatus" style="display:block; margin-bottom: 4px; font-size: var(--font-size-sm); color: var(--text-secondary);">Status</label>
                 <select id="taskStatus" style="width: 100%; padding: var(--space-3); margin-bottom: var(--space-6); background: var(--bg-base); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: var(--radius-md); outline: none;">
                     <option value="todo" ${task.status === 'todo' ? 'selected' : ''}>To Do</option>
                     <option value="in_progress" ${task.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
@@ -114,7 +142,8 @@ window.saveTask = (id) => {
     const updates = {
         title,
         description: document.getElementById('taskDesc').value.trim(),
-        status: document.getElementById('taskStatus').value
+        status: document.getElementById('taskStatus').value,
+        deadline: document.getElementById('taskDeadline').value
     };
 
     if (id) {
