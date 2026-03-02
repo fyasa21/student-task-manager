@@ -1,98 +1,145 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Actask - Progressive Task Management</title>
 
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#121212">
-    <meta name="description" content="A powerful, highly-responsive project and task management application.">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon"
-        href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzBmMGYxMSIvPjxwb2x5Z29uIHBvaW50cz0iMjU2LDEwMCA0MDAsNDAwIDExMiw0MDAiIGZpbGw9IiM2MzY2ZjEiLz48L3N2Zz4=">
+    <meta name="theme-color" content="#121212" />
+    <meta
+      name="description"
+      content="A powerful, highly-responsive project and task management application."
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzBmMGYxMSIvPjxwb2x5Z29uIHBvaW50cz0iMjU2LDEwMCA0MDAsNDAwIDExMiw0MDAiIGZpbGw9IiM2MzY2ZjEiLz48L3N2Zz4="
+    />
 
     <!-- Fonts: Inter for a clean, modern look -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Styles -->
-    <link rel="stylesheet" href="/styles/variables.css">
-    <link rel="stylesheet" href="/styles/main.css">
-</head>
+    <link rel="stylesheet" href="/styles/variables.css" />
+    <link rel="stylesheet" href="/styles/main.css" />
+  </head>
 
-<body>
-
+  <body>
     <div id="app" class="app-container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <span class="logo-icon">▲</span>
-                    <span class="logo-text">Actask</span>
-                </div>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="#" class="nav-item active" data-view="dashboard">
-                    <span class="icon">⌂</span> Dashboard
-                </a>
-                <a href="#" class="nav-item" data-view="projects">
-                    <span class="icon">◫</span> Projects
-                </a>
-                <a href="#" class="nav-item" data-view="tasks">
-                    <span class="icon">✔</span> My Tasks
-                </a>
-            </nav>
-            <div class="sidebar-footer">
-                <button class="btn btn-primary w-100" id="btnNewTask">
-                    + New Task
-                </button>
-            </div>
-        </aside>
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo">
+            <span class="logo-icon">▲</span>
+            <span class="logo-text">Actask</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item active" data-view="dashboard">
+            <span class="icon">⌂</span> Dashboard
+          </a>
+          <a href="#" class="nav-item" data-view="projects">
+            <span class="icon">◫</span> Projects
+          </a>
+          <a href="#" class="nav-item" data-view="tasks">
+            <span class="icon">✔</span> My Tasks
+          </a>
+        </nav>
+        <div class="sidebar-footer">
+          <button class="btn btn-primary w-100" id="btnNewTask">
+            + New Task
+          </button>
+        </div>
+      </aside>
 
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <header class="topbar">
-                <div class="topbar-left">
-                    <button class="menu-toggle d-md-none" id="btnMenuToggle">☰</button>
-                    <h1 class="page-title" id="pageTitle">Dashboard</h1>
-                </div>
-                <div class="topbar-right">
-                    <div class="search-bar">
-                        <span class="icon">🔍</span>
-                        <input type="text" placeholder="Search...">
-                    </div>
-                    <div class="user-profile">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" class="avatar">
-                    </div>
-                </div>
-            </header>
-
-            <div class="content-view" id="contentView">
-                <!-- Dynamic Content Injected Here -->
+      <!-- Main Content Area -->
+      <main class="main-content">
+        <header class="topbar">
+          <div class="topbar-left">
+            <button class="menu-toggle d-md-none" id="btnMenuToggle">☰</button>
+            <h1 class="page-title" id="pageTitle">Dashboard</h1>
+          </div>
+          <div
+            class="topbar-right"
+            style="display: flex; align-items: center; gap: 12px"
+          >
+            <div class="search-bar">
+              <span class="icon">🔍</span>
+              <input type="text" placeholder="Search..." />
             </div>
-        </main>
+
+            <button
+              id="logoutBtn"
+              style="
+                padding: 6px 14px;
+                border-radius: 6px;
+                border: none;
+                background: #ef4444;
+                color: white;
+                cursor: pointer;
+              "
+            >
+              Logout
+            </button>
+
+            <div class="user-profile">
+              <img
+                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+                class="avatar"
+              />
+            </div>
+          </div>
+        </header>
+
+        <div class="content-view" id="contentView">
+          <!-- Dynamic Content Injected Here -->
+        </div>
+      </main>
     </div>
 
     <!-- Modals Overlay -->
-    <div class="modal-overlay" id="modalOverlay" style="display: none;"></div>
+    <div class="modal-overlay" id="modalOverlay" style="display: none"></div>
 
     <!-- Scripts -->
     <script type="module" src="/src/app.js"></script>
     <script>
-        // Check that service workers are supported
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(registration => {
-                    console.log('SW registered: ', registration);
-                }).catch(registrationError => {
-                    console.log('SW registration failed: ', registrationError);
-                });
-            });
-        }
-    </script>
-</body>
+      // Check that service workers are supported
+      if ("serviceWorker" in navigator) {
+        const isLocalhost =
+          location.hostname === "localhost" ||
+          location.hostname === "127.0.0.1";
 
+        window.addEventListener("load", async () => {
+          // ❌ DEV MODE → hapus service worker lama
+          if (isLocalhost) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            for (let reg of regs) {
+              await reg.unregister();
+            }
+            console.log("SW disabled in development");
+            return;
+          }
+
+          // ✅ PRODUCTION → register
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then((reg) => console.log("SW registered:", reg))
+            .catch((err) => console.log("SW failed:", err));
+        });
+      }
+    </script>
+    <script type="module">
+      import { Auth } from "/src/auth.js";
+      window.logout = Auth.logout;
+    </script>
+  </body>
 </html>
